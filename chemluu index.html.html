@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<!--
+ ╔══════════════════════════════════════════════════════════════════════╗
+ ║                                                                      ║
+ ║   >>>  TEMPEL URL SPREADSHEET (APPS SCRIPT) ANDA DI SINI  <<<        ║
+ ║                                                                      ║
+ ║   Cari baris di bawah yang berisi:  const URL_SPREADSHEET = "";      ║
+ ║   Tempel URL (yang berakhiran /exec) DI ANTARA kedua tanda kutip "". ║
+ ║                                                                      ║
+ ║   Contoh hasil akhir:                                                ║
+ ║   const URL_SPREADSHEET = "https://script.google.com/macros/s/AKfy.../exec"; ║
+ ║                                                                      ║
+ ╚══════════════════════════════════════════════════════════════════════╝
+-->
+<script>
+/* ################################################################### */
+/* #                                                                 # */
+/* #   TEMPEL URL SPREADSHEET DI ANTARA TANDA KUTIP DI BARIS BAWAH    # */
+/* #                                                                 # */
+/* ################################################################### */
+ 
+const URL_SPREADSHEET = "https://script.google.com/macros/s/AKfycbz2c0mwahqPNv0QUwYuHD8i5hdqmaV1JdoqWEUE0BnQX-HXRqblkHPVPiZgRyKU/exec";   // <<<<<< TEMPEL DI DALAM TANDA KUTIP INI (jangan hapus tanda kutip & titik koma)
+ 
+/* ################################################################### */
+/* #   SELESAI. Jangan ubah apa pun di bawah bagian ini.             # */
+/* ################################################################### */
+</script>
+ 
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ChemLuper — Simulasi Luas Permukaan & Laju Reaksi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--butter:#FFF3B0;--butter-deep:#FFE58A;--ink:#3B2E1A;--ink-soft:#6B5E3F;--green:#4C8C4A;--green-dark:#2F5D2E;--green-pale:#EAF6E9;--red:#D96C4A;--card:#FFFDF5;--shadow:0 10px 24px rgba(80,60,10,.18);--c-Mg:#4C8C4A;--ungu:#8A6AC9;--ungu-pale:#F3EAFB;--ungu-deep:#6B4FA0}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:#EDE7D9;color:var(--ink);overflow:hidden;font-family:'Nunito',system-ui,sans-serif}
+h1,h2,h3,h4{font-family:'Baloo 2',cursive;margin:0}
+.page{display:none;position:fixed;inset:0;width:100%;height:100%;padding:2.2vh 3vw;overflow-y:auto}
+.page.active{display:flex;flex-direction:column}
+button{cursor:pointer;font-family:inherit;border:none}
+.nav-btn{background:var(--green);color:#fff;padding:10px 22px;border-radius:30px;font-weight:700;font-size:1rem;box-shadow:0 6px 0 var(--green-dark);transition:transform .12s}
+.nav-btn:hover{transform:translateY(-2px)}
+.nav-btn:active{transform:translateY(3px);box-shadow:0 2px 0 var(--green-dark)}
+.nav-btn.secondary{background:#fff;color:var(--green-dark);box-shadow:0 6px 0 #D8D0AE;border:2px solid #E5D9A8}
+.nav-btn.pink{background:var(--red);box-shadow:0 6px 0 #A9492E}
+.nav-btn.kecil{font-size:.82rem;padding:8px 14px}
+.nav-btn:disabled{opacity:.45;cursor:not-allowed;box-shadow:none;transform:none}
+.page-title{font-size:1.5rem;color:var(--green-dark);text-align:center}
+.page-sub{text-align:center;font-size:.85rem;opacity:.8;margin:2px 0 0;font-weight:700}
+.pesan{font-size:.78rem;font-weight:700;color:var(--red);min-height:18px;margin-top:6px}
+.kartu{background:var(--card);border-radius:22px;box-shadow:var(--shadow);padding:16px 20px}
+ 
+/* Jaja */
+.lambai{animation:lambai 1.15s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+@keyframes lambai{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(20deg)}}
+.jaja-slot{text-align:center}
+.jaja-fig{width:var(--js,100px);margin:0 auto;filter:drop-shadow(0 8px 10px rgba(59,46,26,.22))}
+.jaja-fig svg{width:100%;display:block}
+.jaja-cap{font-size:.78rem;font-weight:700;color:var(--ink-soft);background:#fff;border-radius:14px;padding:6px 10px;margin:6px auto 0;max-width:230px;line-height:1.35;box-shadow:0 4px 10px rgba(60,90,50,.14)}
+ 
+/* Hal 1 */
+#p1{background:radial-gradient(circle at 20% 15%,var(--butter-deep),var(--butter) 70%)}
+.g1{flex:1;display:grid;grid-template-columns:minmax(180px,28%) 1fr;grid-template-rows:auto auto 1fr;gap:10px 3vw;max-width:1100px;width:100%;margin:0 auto}
+.g1 h1{grid-column:1/-1;font-size:clamp(1.5rem,3.2vw,2.3rem);color:var(--green-dark);line-height:1.2}
+.g1 .sub1{grid-column:1/-1;margin:0 0 0 14%;font-size:clamp(.95rem,1.6vw,1.2rem);font-weight:700;color:var(--ink-soft)}
+.g1 .jaja-slot{grid-row:3;grid-column:1;align-self:center}
+.g1 .btn-mulai{grid-row:3;grid-column:2;align-self:end;font-size:1.3rem;padding:18px;border-radius:40px}
+ 
+/* Hal 2 */
+#p2{background:var(--ungu-pale)}
+.g2{flex:1;display:grid;grid-template-columns:1fr 1.5fr 160px;grid-template-rows:1fr auto;gap:14px;max-width:1150px;width:100%;margin:0 auto}
+.g2 label{display:block;font-size:.8rem;font-weight:700;margin:10px 0 4px;color:var(--green-dark)}
+.g2 input{width:100%;padding:9px 12px;border-radius:10px;border:2px solid #E5D9A8;font-size:.95rem}
+.g2 input:focus{outline:2px solid var(--green)}
+.g2 h3{font-size:1.1rem;color:var(--ungu-deep);margin-bottom:6px}
+.g2 ul{margin:0;padding-left:20px;font-size:.88rem;line-height:1.75}
+.hal{background:#FFF1B8;border-radius:22px;padding:10px 16px;box-shadow:var(--shadow)}
+.hal h4{font-size:.9rem;color:#7A5A12;margin-bottom:6px}
+.chip{display:inline-block;background:#fff;border-radius:999px;padding:3px 10px;font-size:.74rem;font-weight:800;margin:2px 3px 2px 0;color:var(--ink-soft)}
+ 
+/* Hal 3 */
+#p3{background:var(--green-pale)}
+.g3{flex:1;display:flex;flex-direction:column;gap:10px;max-width:1000px;width:100%;margin:0 auto}
+.bar{border-radius:26px;padding:12px 24px;box-shadow:var(--shadow);font-size:.84rem;line-height:1.5}
+.bar h4{font-size:.95rem;margin-bottom:4px;color:var(--green-dark)}
+.bar p,.bar ol{margin:0}.bar ol{padding-left:18px}
+.bar-biru{background:#DCECFA}.bar-hijau{background:#DDF0DA}
+.faktor{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.factor-btn{background:#FDE6E4;color:var(--ink);padding:14px 22px;border-radius:20px;font-weight:800;box-shadow:var(--shadow);font-size:.95rem;min-width:130px}
+.factor-btn.active{background:var(--red);color:#fff}
+.bot3{display:grid;grid-template-columns:1fr minmax(0,2.2fr) 1fr;gap:12px;align-items:end;margin-top:auto}
+.bot3>button:first-child{justify-self:start}.bot3>button:last-child{justify-self:end}
+.penjelasan{background:#FFF1B8;border-radius:24px;padding:14px 20px;min-height:110px;font-size:.86rem;line-height:1.6;box-shadow:var(--shadow)}
+.judul-kecil{text-align:center;font-family:'Baloo 2';font-size:.9rem;color:var(--ungu-deep);margin:6px 0 0}
+ 
+/* Hal 4 */
+#p4{background:#F5F2D9}
+.g4{flex:1;display:flex;flex-direction:column;gap:10px;max-width:1150px;width:100%;margin:0 auto}
+.vis{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.sisi{background:#fff;border-radius:24px;padding:12px;box-shadow:0 10px 24px rgba(60,90,50,.14);border:3px solid #E4EFD8}
+.sisi h4{font-size:1rem;text-align:center;margin-bottom:4px;color:var(--green-dark)}
+.panggung{border-radius:16px;overflow:hidden}.panggung svg{display:block;width:100%;height:auto}
+.cap{font-size:.74rem;font-weight:700;color:var(--ink-soft);text-align:center;line-height:1.4;margin:6px 4px 0;min-height:32px}
+.bot4{display:grid;grid-template-columns:1.3fr .85fr 1.3fr;gap:14px;align-items:start}
+.tengah4{display:flex;flex-direction:column;align-items:center;gap:10px}
+.toggles{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+.pred{background:#FFF1B8;border-radius:24px;padding:12px 16px;box-shadow:var(--shadow);font-size:.82rem}
+.pred h4{font-size:.92rem;color:#7A5A12;margin-bottom:6px}
+.kunci{font-size:.76rem;font-weight:800;color:#8A6A2F;margin-bottom:6px}
+.pred.locked .soal{opacity:.4;pointer-events:none}
+.soal{margin-bottom:10px}.q{margin:0 0 6px;font-weight:800;line-height:1.35}
+.ops{display:flex;gap:6px;flex-wrap:wrap}
+.opsi-btn{background:#fff;border:2px solid #E4DBFA;border-radius:12px;padding:7px 12px;font-size:.8rem;font-weight:800;color:var(--ink-soft)}
+.opsi-btn:hover:not(:disabled){border-color:var(--ungu)}
+.opsi-btn.bn{background:var(--green);color:#fff;border-color:var(--green-dark)}
+.opsi-btn.sl{background:var(--red);color:#fff;border-color:#A9492E}
+.pred textarea{width:100%;border-radius:12px;border:2px solid #E5D9A8;padding:8px;font-family:inherit;font-size:.82rem;resize:vertical}
+.fb{display:none;font-weight:800;font-size:.82rem;border-radius:10px;padding:6px 10px;margin-top:6px}
+.fb.ok{display:block;background:#E6F6E6;color:#2F5D2E}.fb.no{display:block;background:#FDE8E4;color:#A9492E}
+.fb small{display:block;font-weight:700;margin-top:3px;color:var(--ink-soft)}
+ 
+/* Hal 5 */
+#p5{background:#FCEAEA}
+.g5{flex:1;display:flex;flex-direction:column;gap:10px;max-width:1150px;width:100%;margin:0 auto}
+.kontrol{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.panel-sim{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.beaker-box{background:#fff;border-radius:22px;padding:10px 12px 12px;border:3px solid #EDE9D2;box-shadow:0 10px 22px rgba(60,90,50,.12)}
+.beaker-box h4{font-size:1rem;text-align:center;margin-bottom:6px}
+.beaker-box canvas{width:100%;height:auto;display:block;border-radius:16px;background:linear-gradient(180deg,#F4FBFF,#E4F1FC)}
+.statistik{display:flex;justify-content:space-between;gap:6px;font-size:.68rem;font-weight:800;color:var(--ink-soft);margin-top:6px;flex-wrap:wrap}
+.statistik b{color:var(--green-dark)}
+.bar2{height:11px;background:#EFEAD8;border-radius:999px;overflow:hidden;margin-top:5px}
+.bar2 i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--green),var(--red));transition:width .2s}
+.bot5{display:grid;grid-template-columns:1fr minmax(0,2.4fr) 1fr;gap:12px;align-items:end;margin-top:auto}
+.bot5>button:first-child{justify-self:start}.bot5>button:last-child{justify-self:end}
+.chart-card{background:#fff;border-radius:20px;padding:12px 16px;box-shadow:0 10px 22px rgba(60,90,50,.12)}
+.chart-card h4{font-size:.95rem;color:var(--green-dark);text-align:center;margin-bottom:4px}
+.chart-card canvas{width:100%;height:auto;display:block}
+.narasi{font-size:.8rem;font-weight:700;color:var(--ink-soft);margin:6px 0 0;text-align:center;line-height:1.5}
+.zoom-layer{position:fixed;inset:0;background:rgba(59,46,26,.55);backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;z-index:50;padding:16px}
+.zoom-layer.on{display:flex}
+.zoom-kotak{background:#fff;border-radius:26px;padding:14px 18px;width:min(920px,100%);box-shadow:0 30px 60px rgba(0,0,0,.3)}
+.zoom-kotak h3{font-size:1.15rem;color:var(--green-dark)}
+.zoom-kotak canvas{width:100%;height:auto;display:block;border-radius:18px;background:linear-gradient(180deg,#F4F9FF,#E6F1FF);margin-top:6px}
+.zoom-top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+ 
+/* Hal 6 */
+#p6{background:var(--ungu-pale)}
+.g6{flex:1;display:grid;grid-template-columns:1fr 1.3fr 1fr;grid-template-rows:auto auto auto;gap:10px 2vw;max-width:1100px;width:100%;margin:0 auto;align-content:start}
+.g6 h2{grid-column:2;text-align:center;color:var(--green-dark);font-size:1.5rem}
+.g6 .reflect-card{grid-column:2;grid-row:2;background:#CFE8CC;border-radius:26px;padding:16px;box-shadow:var(--shadow)}
+.g6 .jaja-slot{grid-column:3;grid-row:2;align-self:center}
+.g6 .kembali6{grid-column:2;grid-row:3;justify-self:stretch}
+.pil{background:#FDE6E4;border-radius:22px;padding:10px 14px;margin-bottom:10px}
+.pil label{display:block;font-weight:800;font-size:.85rem;margin-bottom:4px;color:var(--green-dark)}
+.pil textarea,.pil select{width:100%;padding:8px;border-radius:12px;border:2px solid #E5D9A8;font-size:.88rem;font-family:inherit}
+.thanks{display:none;text-align:center;font-size:1.05rem;color:var(--green-dark);font-weight:800;padding:30px 10px;background:#fff;border-radius:22px}
+ 
+@media (max-width:820px){
+ .g1,.g2,.g6,.vis,.bot4,.panel-sim,.bot3,.bot5{display:flex;flex-direction:column}
+ .g1 h1,.g1 .sub1{margin-left:0}
+}
+ 
+/* ===== REVISI: font besar, responsif, tampilan lebih menarik ===== */
+html{font-size:17px}
+@media(min-width:1000px){html{font-size:19px}}
+body{line-height:1.5}
+.page{padding:3vh 4vw;animation:masuk .35s ease}
+@keyframes masuk{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.kartu{padding:20px 24px;border-top:6px solid var(--green)}
+.bar{font-size:1.05rem;border-left:8px solid var(--green)}.bar-biru{border-left-color:#5B9BD5}.bar h4{font-size:1.2rem}
+.nav-btn{font-size:1.05rem;padding:12px 26px}.nav-btn.kecil{font-size:.95rem;padding:10px 16px}
+.page-title{font-size:2rem}.page-sub{font-size:1.05rem}
+.jaja-cap{font-size:.95rem;max-width:280px}
+.g2 label{font-size:1rem}.g2 input{font-size:1.05rem;padding:11px 14px}.g2 ul{font-size:1.05rem}.g2 h3{font-size:1.35rem}
+.kolomTengah{display:flex;flex-direction:column;gap:14px}
+.pemantik{background:#FFF1B8;border-top-color:#F5A300}.pemantik p{margin:0 0 10px;font-size:1.05rem}.pemantik label{margin-top:12px}
+.pemantik textarea{width:100%;border-radius:12px;border:2px solid #E5D9A8;padding:10px;font-family:inherit;font-size:1.02rem;resize:vertical}
+.opsi-btn.pilih{background:var(--ungu);color:#fff;border-color:var(--ungu-deep)}
+.chip{font-size:.92rem}.hal h4{font-size:1.05rem}
+.factor-btn{font-size:1.1rem}.penjelasan{font-size:1.05rem}.judul-kecil{font-size:1.05rem}
+.cap{font-size:.92rem}.pred{font-size:1rem}.pred h4{font-size:1.1rem}.kunci{font-size:.92rem}
+.opsi-btn{font-size:.98rem;padding:9px 14px}.pred textarea{font-size:1rem}.fb{font-size:.98rem}
+.statistik{font-size:.88rem}.narasi{font-size:.98rem}.beaker-box h4,.sisi h4{font-size:1.2rem}.chart-card h4{font-size:1.15rem}
+.zoom-kotak h3{font-size:1.3rem}.zoom-kotak{max-height:94vh;overflow-y:auto}#zoomNarasi{text-align:left;line-height:1.6}
+.ringkas table{width:100%;border-collapse:collapse;font-size:.95rem;margin-top:8px}
+.ringkas th,.ringkas td{padding:6px 4px;text-align:center;border-bottom:1px solid #EFE9D0}.ringkas th{color:var(--green-dark)}
+.g6b{max-width:860px;width:100%;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+.g6b h3{font-size:1.35rem;color:var(--ungu-deep);margin-bottom:6px}
+.evq{margin-bottom:20px}.evq p{font-weight:800;margin:0 0 8px;font-size:1.05rem}
+.evopt{display:block;width:100%;text-align:left;background:#fff;border:2px solid #E4DBFA;border-radius:14px;padding:11px 14px;margin-bottom:8px;font-size:1rem;font-weight:700;color:var(--ink)}
+.evopt.pilih{background:var(--ungu);color:#fff;border-color:var(--ungu-deep)}
+.g6b textarea,.g6b select{width:100%;padding:10px;border-radius:12px;border:2px solid #E5D9A8;font-size:1rem;font-family:inherit}
+.g6b .pil label{font-size:1rem}.g6b .pesan{font-size:.95rem;text-align:center}
+.thanks{padding:24px 18px}.skorBesar{font-family:'Baloo 2';font-size:4.5rem;line-height:1;color:var(--green-dark)}
+.rincian{text-align:left;font-size:1rem;font-weight:700;margin-top:12px;line-height:1.7;color:var(--ink)}
+@media (max-width:820px){
+ html{font-size:17px}
+ .page{padding:2vh 4vw 4vh}
+ .g1,.g2,.g3,.g4,.g5{gap:14px}
+ .g2>button{align-self:stretch!important}
+ .g2>.hal{order:7}.g2>.btnK2{order:8}.g2>.btnN2{order:9}
+ .bot3>div,.bot5>.chart-card{order:-1}
+ .nav-btn{width:100%}.toggles .nav-btn,.kontrol .nav-btn,.zoom-top .nav-btn{width:auto}
+ .factor-btn{flex:1 1 45%;min-width:0}
+ .page-title{font-size:1.6rem}
+}
+</style>
+</head>
+<body>
+ 
+<!-- ============ HALAMAN 1 : PEMBUKAAN ============ -->
+<section id="p1" class="page active">
+ <div class="g1">
+  <h1>Selamat datang di ChemLuper! Mari menjelajahi bagaimana luas permukaan memengaruhi laju reaksi</h1>
+  <p class="sub1">Simulasi bagaimana luas permukaan memengaruhi laju reaksi</p>
+  <div class="jaja-slot" style="--js:clamp(150px,22vw,250px)" data-cap="Halo! Aku Jaja, ayo temani aku menjelajah reaksi kimia!"></div>
+  <button class="nav-btn btn-mulai" onclick="goPage(2)">Mulai →</button>
+ </div>
+</section>
+ 
+<!-- ============ HALAMAN 2 : IDENTITAS & PETUNJUK ============ -->
+<section id="p2" class="page">
+ <div class="g2">
+  <div class="kartu">
+   <h3>🪪 Identitas Siswa</h3>
+   <label>Nama</label><input id="inNama" placeholder="Tulis namamu">
+   <label>Kelas</label><input id="inKelas" placeholder="Contoh: XI-2">
+   <label>Kelompok</label><input id="inKelompok" placeholder="Contoh: Kelompok 3">
+   <div class="pesan" id="pesanIdentitas"></div>
+  </div>
+  <div class="kolomTengah">
+  <div class="kartu">
+   <h3>📖 Petunjuk Penggunaan</h3>
+   <ul>
+    <li>Isi nama, kelas, dan kelompok, lalu klik <b>Selanjutnya</b>.</li>
+    <li>Ikuti panduan Jaja di setiap halaman.</li>
+    <li>Klik kartu atau tombol untuk membaca penjelasan dan menjawab pertanyaan.</li>
+    <li>Pada simulasi, tekan <b>Mulai</b>, lalu amati tumbukan partikel dan grafiknya. Gunakan tombol <b>Zoom</b> untuk melihat tingkat partikelnya.</li>
+    <li>Gunakan tombol <b>Kembali</b> dan <b>Selanjutnya</b> untuk berpindah halaman.</li>
+   </ul>
+  </div>
+  <div class="kartu pemantik">
+   <h3>🔥 Ayo, bayangkan situasi berikut!</h3>
+   <p>Saat berkemah, kamu ingin membuat api unggun. Tersedia dua jenis kayu dengan massa yang sama. Kayu pertama masih berbentuk potongan besar, sedangkan kayu kedua telah dipotong menjadi bagian-bagian kecil. Keduanya dibakar dalam kondisi yang sama. Menurutmu, kayu manakah yang akan lebih cepat terbakar? Mengapa hal tersebut bisa terjadi, padahal keduanya memiliki massa yang sama? Ayo, berikan prediksimu!</p>
+   <div class="ops" id="opsPem">
+    <button type="button" class="opsi-btn" onclick="pilihPem('Kayu berukuran kecil',this)">Kayu berukuran kecil</button>
+    <button type="button" class="opsi-btn" onclick="pilihPem('Kayu berukuran besar',this)">Kayu berukuran besar</button>
+    <button type="button" class="opsi-btn" onclick="pilihPem('Keduanya terbakar dengan kecepatan sama',this)">Keduanya terbakar dengan kecepatan sama</button>
+   </div>
+   <label>Apa alasanmu?</label>
+   <textarea id="taPem" rows="3" placeholder="Tulis alasanmu di sini..."></textarea>
+   <button type="button" class="nav-btn kecil" style="margin-top:8px" onclick="periksaPem()">Periksa jawaban</button>
+   <div class="fb" id="fbPem"></div>
+  </div>
+  </div>
+  <div class="jaja-slot" style="--js:110px;align-self:center" data-cap="Isi identitasmu dan jawab pertanyaan api unggun dulu, ya!"></div>
+  <button class="nav-btn secondary btnK2" style="justify-self:start;align-self:end" onclick="goPage(1)">← Kembali</button>
+  <div class="hal">
+   <h4>🎓 Hal yang akan dipelajari</h4>
+   <span class="chip">Faktor yang memengaruhi laju reaksi</span><span class="chip">Teori tumbukan</span><span class="chip">Luas permukaan: pita vs serbuk Mg</span><span class="chip">Simulasi Mg + HCl</span><span class="chip">Evaluasi</span><span class="chip">Refleksi</span>
+  </div>
+  <button class="nav-btn btnN2" style="justify-self:end;align-self:end" onclick="cekIdentitas()">Selanjutnya →</button>
+ </div>
+</section>
+ 
+<!-- ============ HALAMAN 3 : TUJUAN & TEORI ============ -->
+<section id="p3" class="page">
+ <div class="g3">
+  <div class="bar bar-biru"><h4>🎯 Capaian Pembelajaran</h4>
+   <p>Pada akhir Fase F, peserta didik mampu menganalisis faktor-faktor yang memengaruhi laju reaksi, khususnya pengaruh luas permukaan terhadap kecepatan reaksi berdasarkan teori tumbukan dan frekuensi tumbukan efektif dan menyajikan hasil eksplorasi melalui media simulasi interaktif untuk mengidentifikasi hubungan antara ukuran partikel dan laju reaksi secara sistematis.</p></div>
+  <div class="bar bar-hijau"><h4>🧭 Tujuan Pembelajaran</h4>
+   <ol><li>Peserta didik mampu menjelaskan pengaruh luas permukaan terhadap laju reaksi berdasarkan teori tumbukan dan frekuensi tumbukan efektif.</li>
+   <li>Peserta didik mampu menganalisis hubungan antara ukuran partikel dan laju reaksi melalui hasil eksplorasi menggunakan media simulasi interaktif serta menyajikan kesimpulan berdasarkan hasil analisis.</li></ol></div>
+  <div class="faktor">
+   <button class="factor-btn" onclick="showFactor('suhu',this)">Suhu</button>
+   <button class="factor-btn" onclick="showFactor('konsentrasi',this)">Konsentrasi</button>
+   <button class="factor-btn" onclick="showFactor('katalis',this)">Katalis</button>
+   <button class="factor-btn" onclick="showFactor('luas',this)">Luas Permukaan</button>
+  </div>
+  <div class="bot3">
+   <button class="nav-btn secondary" onclick="goPage(2)">← Kembali</button>
+   <div><div class="penjelasan" id="penjelasan">Klik salah satu kartu di atas untuk membaca penjelasan singkatnya.</div>
+    <p class="judul-kecil">Teori Pengenalan: 4 Faktor yang Memengaruhi Laju Reaksi</p></div>
+   <button class="nav-btn" onclick="goPage(4)">Selanjutnya →</button>
+  </div>
+ </div>
+</section>
+ 
+<!-- ============ HALAMAN 4 : PARTIKEL + PREDIKSI ============ -->
+<section id="p4" class="page">
+ <div class="g4">
+  <div><h2 class="page-title">Luas Permukaan: Pita Mg vs Serbuk Mg</h2><p class="page-sub">Massa magnesiumnya sama, hanya bentuknya yang berbeda.</p></div>
+  <div class="vis">
+   <div class="sisi"><h4>🧱 Pita Mg</h4><div class="panggung"><svg id="svgBongkah" viewBox="0 0 380 236"></svg></div><p class="cap" id="capKiri"></p></div>
+   <div class="sisi"><h4>🧂 Serbuk Mg</h4><div class="panggung"><svg id="svgSerbuk" viewBox="0 0 380 236"></svg></div><p class="cap" id="capKanan"></p></div>
+  </div>
+  <div class="bot4">
+   <div class="pred" id="predA"></div>
+   <div class="tengah4">
+    <div class="toggles">
+     <button class="nav-btn kecil" onclick="gambarHal3('partikel')">🔬 Lihat susunan partikel</button>
+     <button class="nav-btn kecil secondary" onclick="gambarHal3('wujud')">🧱 Lihat wujud asli</button>
+    </div>
+    <div class="jaja-slot" style="--js:84px" data-cap="Amati dulu bentuknya, lalu jawab prediksimu, ya!"></div>
+   </div>
+   <div class="pred locked" id="predB"></div>
+  </div>
+  <div style="display:flex;justify-content:space-between;margin-top:auto;padding-top:6px">
+   <button class="nav-btn secondary" onclick="goPage(3)">← Kembali</button>
+   <button class="nav-btn" id="btnLanjutP4" disabled onclick="cekLanjutP4()">Selanjutnya →</button>
+  </div>
+ </div>
+</section>
+ 
+<!-- ============ HALAMAN 5 : SIMULASI ============ -->
+<section id="p5" class="page">
+ <div class="g5">
+  <div><h2 class="page-title">Simulasi: Mg + HCl</h2><p class="page-sub">Mg(s) + 2HCl(aq) → MgCl₂(aq) + H₂(g)</p></div>
+  <div class="kontrol">
+   <button class="nav-btn kecil" id="btnJalan">▶ Mulai</button>
+   <button class="nav-btn kecil secondary" id="btnUlang">↻ Ulangi simulasi</button>
+   <button class="nav-btn kecil pink" id="btnZoomKiri">🔍 Zoom pita</button>
+   <button class="nav-btn kecil pink" id="btnZoomKanan">🔍 Zoom serbuk</button>
+  </div>
+  <div class="panel-sim">
+   <div class="beaker-box"><h4 style="color:#8A6A2F">🧱 Pita Mg + larutan HCl</h4>
+    <canvas id="simKiri" width="640" height="420"></canvas>
+    <div class="statistik"><span>Mg bereaksi: <b id="sKiriPersen">0%</b></span><span>Tumbukan efektif: <b id="sKiriTumb">0</b></span><span>Gelembung H₂: <b id="sKiriGas">0</b></span><span>Waktu: <b id="sKiriWaktu">0,0 s</b></span></div>
+    <div class="bar2"><i id="barKiri"></i></div></div>
+   <div class="beaker-box"><h4 style="color:var(--green-dark)">🧂 Serbuk Mg + larutan HCl</h4>
+    <canvas id="simKanan" width="640" height="420"></canvas>
+    <div class="statistik"><span>Mg bereaksi: <b id="sKananPersen">0%</b></span><span>Tumbukan efektif: <b id="sKananTumb">0</b></span><span>Gelembung H₂: <b id="sKananGas">0</b></span><span>Waktu: <b id="sKananWaktu">0,0 s</b></span></div>
+    <div class="bar2"><i id="barKanan"></i></div></div>
+  </div>
+  <div class="bot5">
+   <button class="nav-btn secondary" onclick="goPage(4)">← Kembali</button>
+   <div class="chart-card">
+    <h4>📈 Grafik Tumbukan Efektif vs Waktu</h4>
+    <canvas id="chartTumbukan" width="900" height="200"></canvas>
+    <p class="narasi" id="narasiSim"></p>
+    <div class="ringkas" id="ringkas"></div>
+    <p class="narasi" style="font-weight:600;opacity:.85">Catatan: kedua gelas memakai massa Mg, volume dan konsentrasi HCl, suhu, serta kecepatan H⁺ yang sama; hanya bentuk Mg yang berbeda. Peluang tumbukan efektif juga sama. HCl dianggap berlebih, dan waktu simulasi dipercepat, jadi yang bermakna adalah perbandingannya.</p>
+   </div>
+   <button class="nav-btn" onclick="goPage(6)">Selanjutnya →</button>
+  </div>
+ </div>
+ <div class="zoom-layer" id="zoomLayer">
+  <div class="zoom-kotak">
+   <div class="zoom-top"><h3 id="zoomJudul">Zoom partikel</h3>
+    <div class="kontrol"><button class="nav-btn kecil secondary" id="btnZoomGanti">↔ Ganti sisi</button><button class="nav-btn kecil" id="btnZoomTutup">✕ Tutup</button></div></div>
+   <canvas id="zoomCanvas" width="820" height="360"></canvas>
+   <p class="narasi" id="zoomNarasi"></p>
+  </div>
+ </div>
+</section>
+ 
+<!-- ============ HALAMAN 6 : EVALUASI, REFLEKSI, SKOR ============ -->
+<section id="p6" class="page">
+ <div class="g6b">
+  <h2 class="page-title">Evaluasi & Refleksi</h2>
+  <div id="formAkhir" style="display:flex;flex-direction:column;gap:16px">
+   <div class="kartu">
+    <h3>📝 Kuis Pemahaman Konsep</h3>
+    <p class="page-sub" style="text-align:left;margin-bottom:14px">Teori tumbukan dan luas permukaan. Jawab dulu, skormu muncul setelah menekan Lihat skor.</p>
+    <div id="evalSoal"></div>
+   </div>
+   <div class="kartu" style="background:#CFE8CC;border-top-color:var(--green-dark)">
+    <h3>💭 Refleksi Pembelajaran</h3>
+    <div class="pil"><label>Ilmu / materi apa yang kamu dapatkan dari simulasi ini?</label><textarea id="rMateri" rows="2" placeholder="Tulis di sini..."></textarea></div>
+    <div class="pil"><label>Apakah kamu bisa menyimpulkan hasilnya?</label><select id="rSimpul"><option value="">Pilih</option><option>Ya, saya bisa menyimpulkan</option><option>Masih ragu-ragu</option><option>Belum bisa menyimpulkan</option></select></div>
+    <div class="pil"><label>Tuliskan kesimpulanmu</label><textarea id="rKesimpulan" rows="3" placeholder="Tulis kesimpulanmu..."></textarea></div>
+   </div>
+   <div class="jaja-slot" style="--js:120px" data-cap="Semangat! Sebentar lagi kamu bisa lihat skormu."></div>
+   <button class="nav-btn" onclick="submitReflect()">Lihat skor</button>
+   <div class="pesan" id="statusKirim"></div>
+  </div>
+  <div class="thanks" id="thanksMsg"></div>
+  <button class="nav-btn secondary" onclick="goPage(5)">← Kembali ke halaman sebelumnya</button>
+ </div>
+</section>
+ 
+<script>
+function jajaSVG(){
+  const defs=`<defs>
+    <linearGradient id="gBadan" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#F2FBFF"/><stop offset="1" stop-color="#BFE3FA"/>
+    </linearGradient>
+    <linearGradient id="gLeher" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#6FAE6C"/><stop offset="1" stop-color="#2F5D2E"/>
+    </linearGradient>
+    <radialGradient id="gKilau" cx="0.32" cy="0.22" r="0.55">
+      <stop offset="0" stop-color="#fff" stop-opacity=".85"/><stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="gLengan" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#6FAE6C"/><stop offset="1" stop-color="#2F5D2E"/>
+    </linearGradient>
+  </defs>`;
+  const badan=`<ellipse cx="70" cy="160" rx="40" ry="7" fill="rgba(59,46,26,.15)"/>
+    <path d="M55 14h30v30l30 68a24 24 0 0 1-21 35H46a24 24 0 0 1-21-35l30-68z" fill="url(#gBadan)" stroke="#2F5D2E" stroke-width="3.2" stroke-linejoin="round"/>
+    <path d="M55 14h30v30l30 68a24 24 0 0 1-21 35H46a24 24 0 0 1-21-35l30-68z" fill="url(#gKilau)"/>
+    <rect x="53" y="9" width="34" height="11" rx="3.5" fill="url(#gLeher)"/>`;
+  const mataKiri=`<ellipse cx="56" cy="90" rx="7.5" ry="9" fill="#3B2E1A"/><ellipse cx="56" cy="90" rx="4.2" ry="5.4" fill="#2A6B4F"/>
+    <circle cx="58.3" cy="86.5" r="2.1" fill="#fff"/><circle cx="54" cy="93" r="1" fill="#fff" opacity=".8"/>
+    <path d="M48 82 Q56 76 65 81" stroke="#3B2E1A" stroke-width="2.2" fill="none" stroke-linecap="round"/>`;
+  const mataKanan=`<ellipse cx="82" cy="90" rx="7.5" ry="9" fill="#3B2E1A"/><ellipse cx="82" cy="90" rx="4.2" ry="5.4" fill="#2A6B4F"/>
+    <circle cx="84.3" cy="86.5" r="2.1" fill="#fff"/><circle cx="80" cy="93" r="1" fill="#fff" opacity=".8"/>
+    <path d="M75 81 Q84 76 92 82" stroke="#3B2E1A" stroke-width="2.2" fill="none" stroke-linecap="round"/>`;
+  const pipi=`<ellipse cx="50" cy="99" rx="5.5" ry="3.2" fill="#FFB6C1" opacity=".55"/><ellipse cx="88" cy="99" rx="5.5" ry="3.2" fill="#FFB6C1" opacity=".55"/>`;
+  const mulut=`<path d="M58 105 Q70 116 80 105" stroke="#E8607B" stroke-width="3.4" fill="none" stroke-linecap="round"/>`;
+  const wajah=mataKiri+mataKanan+pipi+mulut;
+  const lengan=`<g class="lambai" style="transform-origin:96px 118px"><path d="M92 118 Q126 108 120 78" stroke="url(#gLengan)" stroke-width="9" fill="none" stroke-linecap="round"/><circle cx="120" cy="76" r="9" fill="url(#gBadan)" stroke="#2F5D2E" stroke-width="3"/></g>
+    <path d="M48 118 Q28 130 34 150" stroke="url(#gLengan)" stroke-width="9" fill="none" stroke-linecap="round"/>
+    <circle cx="34" cy="150" r="8" fill="url(#gBadan)" stroke="#2F5D2E" stroke-width="3"/>`;
+  return `<svg viewBox="0 0 140 170">${defs}${badan}${lengan}${wajah}</svg>`;
+}
+ 
+let _jn=0;
+function jajaHTML(){const n=++_jn;return jajaSVG().replace(/(gBadan|gLeher|gKilau|gLengan)/g,'$1'+n);}
+document.querySelectorAll('.jaja-slot').forEach(s=>{s.innerHTML='<div class="jaja-fig">'+jajaHTML()+'</div><div class="jaja-cap">'+(s.dataset.cap||'')+'</div>';});
+ 
+/* ================= NAVIGASI ================= */
+function cekIdentitas(){
+  const a=document.getElementById('inNama'),b=document.getElementById('inKelas'),c=document.getElementById('inKelompok'),ps=document.getElementById('pesanIdentitas');
+  if(!a.value.trim()||!b.value.trim()||!c.value.trim()){
+    ps.textContent='Isi dulu nama, kelas, dan kelompok ya sebelum lanjut 😊';
+    (!a.value.trim()?a:!b.value.trim()?b:c).focus(); return;
+  }
+  if(!pemPilih||document.getElementById('taPem').value.trim().length<3){ps.textContent='Pilih jawaban pemantik dan tulis alasanmu dulu ya 🔥';return;}
+  if(!hasilPem)periksaPem();
+  ps.textContent=''; goPage(3);
+}
+/* ===== PEMANTIK (halaman 2) ===== */
+let pemPilih='',hasilPem=null;
+function pilihPem(v,b){pemPilih=v;hasilPem=null;document.querySelectorAll('#opsPem .opsi-btn').forEach(x=>x.classList.remove('pilih'));b.classList.add('pilih');}
+function cekPem(t){
+  const n=norm(t); if(NEG.test(n))return false;
+  return /(zzperm|sentuh|kontak|oksigen|udara|tumbuk|partikel|bagian)/.test(n)&&(dirOf(n).some(v=>v>0)||/(halus|kecil)/.test(n));
+}
+function periksaPem(){
+  const t=document.getElementById('taPem').value.trim(),f=document.getElementById('fbPem');
+  if(!pemPilih||t.length<3){f.className='fb no';f.textContent='Pilih jawaban dan tulis alasanmu dulu ya.';return;}
+  const ok=pemPilih==='Kayu berukuran kecil'&&cekPem(t);
+  hasilPem={pilihan:pemPilih,alasan:t,benar:ok};
+  f.className='fb '+(ok?'ok':'no');f.textContent=ok?BENAR:SALAH;
+}
+function goPage(n){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('p'+n).classList.add('active');
+  if(n===5) siapkanSimulasi();
+  if(n!==5){ tutupZoom(); hentikanSim(); }
+}
+ 
+/* ================= HALAMAN 3 : 4 FAKTOR ================= */
+const FAKTOR={
+  suhu:'<b>Suhu.</b> Kenaikan suhu meningkatkan energi kinetik partikel sehingga partikel bergerak lebih cepat. Akibatnya frekuensi tumbukan meningkat dan lebih banyak partikel yang energinya melebihi energi aktivasi (Ea), sehingga tumbukan efektif lebih banyak (Teori Tumbukan). Suhu yang lebih tinggi juga memudahkan reaktan mencapai keadaan transisi (kompleks teraktivasi).',
+  konsentrasi:'<b>Konsentrasi.</b> Semakin tinggi konsentrasi (atau tekanan pada fase gas), semakin banyak partikel per satuan volume. Frekuensi tumbukan antarpartikel reaktan per detik meningkat, sehingga laju reaksi menjadi lebih cepat.',
+  katalis:'<b>Katalis.</b> Katalis menyediakan jalur reaksi alternatif dengan energi aktivasi (Ea) yang lebih rendah. Lebih banyak tumbukan yang energinya cukup sehingga berhasil membentuk kompleks teraktivasi dan menjadi produk. Katalis tidak mengubah entalpi reaksi (ΔH) dan tidak ikut habis bereaksi.',
+  luas:'<b>Luas permukaan.</b> Khusus reaksi heterogen (misalnya zat padat dengan larutan), reaksi hanya terjadi di permukaan zat padat yang bersentuhan dengan pereaksi lain. Pada massa yang sama, makin halus ukuran zat padat, makin besar luas permukaannya, sehingga makin banyak partikel zat padat yang dapat ditumbuk. Frekuensi tumbukan efektif meningkat dan laju reaksi lebih cepat. Luas permukaan tidak mengubah energi aktivasi maupun peluang efektif tiap tumbukan; yang bertambah adalah banyaknya tumbukan efektif per detik. <br><b>Pada simulasi ini, kita fokus pada faktor luas permukaan.</b>'
+};
+function showFactor(k,btn){
+  document.querySelectorAll('.factor-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active'); document.getElementById('penjelasan').innerHTML=FAKTOR[k];
+}
+ 
+/* =========================================================
+   HALAMAN 4 : WUJUD ASLI & SUSUNAN PARTIKEL (logam Mg)
+   ========================================================= */
+function rnd(s){return()=>{s=(s*16807)%2147483647;return s/2147483647;};}
+function elek(x,y){return `<circle cx="${x}" cy="${y}" r="2" fill="#F5C542" stroke="#B8901A" stroke-width=".6"/>`;}
+function ionMg(x,y,r,perm){
+  return `<circle cx="${x}" cy="${y}" r="${r}" fill="${perm?'#4C8C4A':'#A9CBA7'}" stroke="${perm?'#1F4A1E':'#7FA77D'}" stroke-width="${perm?2:1}"/><text x="${x}" y="${y+2.4}" text-anchor="middle" font-family="Nunito" font-weight="800" font-size="6.4" fill="#fff">Mg²⁺</text>`;
+}
+function kisi(ox,oy,c,r,sp,rad){
+  let s=`<rect x="${ox-sp*.7}" y="${oy-sp*.7}" width="${(c-1)*sp+sp*1.4}" height="${(r-1)*sp+sp*1.4}" rx="${sp*.6}" fill="rgba(120,170,230,.16)" stroke="#8FB6D8" stroke-dasharray="4 3"/>`;
+  for(let i=0;i<c-1;i++)for(let j=0;j<r;j++)s+=elek(ox+i*sp+sp/2,oy+j*sp);
+  for(let i=0;i<c;i++)for(let j=0;j<r-1;j++)s+=elek(ox+i*sp,oy+j*sp+sp/2);
+  for(let i=0;i<c;i++)for(let j=0;j<r;j++)s+=ionMg(ox+i*sp,oy+j*sp,rad,i===0||j===0||i===c-1||j===r-1);
+  return s;
+}
+function legendaPartikel(){
+  const t=(x,y,l)=>`<text x="${x}" y="${y}" font-family="Nunito" font-weight="800" font-size="8.5" fill="#4A5A48">${l}</text>`;
+  return `<circle cx="14" cy="14" r="4.5" fill="#4C8C4A" stroke="#1F4A1E" stroke-width="2"/>`+t(22,17,'Mg²⁺ di permukaan')+
+   `<circle cx="124" cy="14" r="4.5" fill="#A9CBA7" stroke="#7FA77D"/>`+t(132,17,'Mg²⁺ di dalam')+
+   `<circle cx="214" cy="14" r="2.4" fill="#F5C542" stroke="#B8901A" stroke-width=".6"/>`+t(222,17,'e⁻ (elektron bebas)');
+}
+function pitaWujud(){
+  return `<defs><linearGradient id="gPt" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F2F4F6"/><stop offset=".55" stop-color="#C5CBD2"/><stop offset="1" stop-color="#9AA3AD"/></linearGradient></defs>
+  <ellipse cx="190" cy="178" rx="150" ry="10" fill="rgba(59,46,26,.12)"/>
+  <polygon points="50,100 85,78 335,78 300,100" fill="#E4E8EC" stroke="#7B848E"/>
+  <rect x="50" y="100" width="250" height="60" fill="url(#gPt)" stroke="#7B848E"/>
+  <polygon points="300,100 335,78 335,138 300,160" fill="#AEB6BE" stroke="#7B848E"/>
+  <line x1="62" y1="112" x2="285" y2="112" stroke="#fff" stroke-opacity=".7" stroke-width="2"/>
+  <text x="190" y="210" text-anchor="middle" font-family="Nunito" font-weight="800" font-size="12" fill="#4A5A48">Pita logam magnesium (Mg)</text>`;
+}
+function serbukWujud(){
+  const r=rnd(7);let g='<ellipse cx="190" cy="192" rx="140" ry="9" fill="rgba(59,46,26,.12)"/>';
+  const col=['#B7BEC6','#9AA3AD','#D3D8DD','#7F8993'];
+  for(let k=0;k<150;k++){const v=r(),u=r(),h=115*(1-v*.8),x=190+(u-.5)*2*h,y=190-v*80-r()*5,rad=1.5+r()*2.3;
+    g+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${rad.toFixed(1)}" fill="${col[Math.floor(r()*4)]}"/>`;}
+  return g+`<text x="190" y="218" text-anchor="middle" font-family="Nunito" font-weight="800" font-size="12" fill="#4A5A48">Serbuk logam magnesium (Mg)</text>`;
+}
+function gambarHal3(mode){
+  let b='<rect width="380" height="236" rx="14" fill="#FBF7EE"/>',s='<rect width="380" height="236" rx="14" fill="#EFFCF6"/>';
+  const ck=document.getElementById('capKiri'),cn=document.getElementById('capKanan');
+  if(mode==='wujud'){
+    b+=pitaWujud(); s+=serbukWujud();
+    ck.textContent='Pita logam magnesium berwarna perak keabuan.';
+    cn.textContent='Serbuk logam magnesium: butiran-butiran halus berwarna abu-abu.';
+  }else{
+    b+=legendaPartikel()+kisi(86,58,9,6,26,10);
+    s+=legendaPartikel();
+    for(let k=0;k<6;k++)s+=kisi(56.2+(k%3)*108,k<3?52.2:150.2,3,3,26,10);
+    ck.textContent='Logam Mg: 54 ion Mg²⁺ tersusun teratur dan dikelilingi elektron yang bergerak bebas (ikatan logam). Hanya partikel di permukaan yang bersentuhan dengan larutan.';
+    cn.textContent='Jumlah partikel sama (54 ion Mg²⁺), terbagi menjadi 6 kepingan kecil. Tiap kepingan tersusun dengan cara yang sama.';
+  }
+  document.getElementById('svgBongkah').innerHTML=b; document.getElementById('svgSerbuk').innerHTML=s;
+}
+gambarHal3('wujud');
+ 
+/* =========================================================
+   HALAMAN 4 : PREDIKSI (2 kotak, masing-masing 2 pertanyaan)
+   ========================================================= */
+const BENAR='✅ Betul sekali, kamu hebat.', SALAH='❌ Kurang tepat, belajar lagi ya!';
+const NEG=/\b(tidak|bukan|tak|tanpa|belum)\b/;
+const UP=/\b(besar|membesar|memperbesar|diperbesar|luas|memperluas|bertambah|menambah|meningkat|meningkatkan|naik|banyak|sering|tinggi|cepat|mempercepat)\b/g;
+const DOWN=/\b(kecil|mengecil|memperkecil|sedikit|berkurang|mengurangi|menurun|turun|rendah|jarang|lambat|memperlambat)\b/g;
+function norm(t){return t.toLowerCase().replace(/luas permukaan|permukaan/g,' zzperm ').replace(/[^a-z0-9]+/g,' ');}
+function arah(n){return [(n.match(UP)||[]).length,(n.match(DOWN)||[]).length];}
+const UPW=new Set('besar membesar memperbesar diperbesar luas memperluas bertambah menambah meningkat meningkatkan naik banyak sering tinggi cepat mempercepat halus melebar'.split(' '));
+const DNW=new Set('kecil mengecil memperkecil sedikit berkurang mengurangi menurun turun rendah jarang lambat memperlambat kasar'.split(' '));
+function dirOf(n){return n.split(' ').map(x=>UPW.has(x)?1:DNW.has(x)?-1:0).filter(Boolean);}
+/* Jawaban singkat boleh, asal intinya benar: arah perubahan sebab dan akibat harus searah. */
+function cekQ3(t){
+  const n=norm(t); if(NEG.test(n))return false;
+  if(!/(tumbuk|tabrak|peluang|frekuensi|sering|kontak|sentuh)/.test(n))return false;
+  const d=dirOf(n); if(!d.length)return false;
+  if(d.length===1)return d[0]>0||n.includes('zzperm');
+  return d[0]===d[d.length-1];
+}
+function cekQ4(t){
+  const n=norm(t); if(NEG.test(n))return false;
+  if(!/(laju|reaksi|cepat|lambat|produk)/.test(n))return false;
+  const d=dirOf(n); return d.length>0&&d[0]>0&&d[d.length-1]>0;
+}
+const SOAL=[
+ {tipe:'pilih',teks:'Menurutmu, mana yang luas permukaannya lebih besar?',opsi:[['Pita Mg','pita'],['Serbuk Mg','serbuk'],['Keduanya sama','sama']],benar:'serbuk',hint:'Petunjuk: bandingkan banyaknya partikel Mg yang berada di permukaan pada kedua bentuk.'},
+ {tipe:'pilih',teks:'Mana yang akan bereaksi lebih cepat dengan HCl?',opsi:[['Pita Mg','pita'],['Serbuk Mg','serbuk'],['Keduanya sama','sama']],benar:'serbuk',hint:'Petunjuk: tenang, nanti kamu bisa membuktikannya sendiri di simulasi!'},
+ {tipe:'teks',teks:'Bagaimana perubahan luas permukaan memengaruhi peluang partikel untuk bertumbukan?',cek:cekQ3,hint:'Petunjuk: pikirkan banyaknya partikel Mg yang bisa disentuh H⁺ saat luas permukaan berubah.'},
+ {tipe:'teks',teks:'Jika tumbukan antarpartikel terjadi lebih sering, bagaimana pengaruhnya terhadap laju reaksi?',cek:cekQ4,hint:'Petunjuk: hubungkan banyaknya tumbukan efektif dengan kecepatan terbentuknya produk.'}
+];
+const jawab=[false,false,false,false], hasilPrediksi=[];
+function blokSoal(i){
+  const q=SOAL[i]; let h=`<div class="soal"><p class="q">${q.teks}</p>`;
+  if(q.tipe==='pilih') h+=`<div class="ops" id="ops${i}">`+q.opsi.map(o=>`<button type="button" class="opsi-btn" onclick="pilihOpsi(${i},'${o[1]}',this)">${o[0]}</button>`).join('')+'</div>';
+  else h+=`<textarea id="ta${i}" rows="2" placeholder="Tulis jawabanmu di sini..."></textarea><button type="button" class="nav-btn kecil" style="margin-top:6px" onclick="periksa(${i})">Periksa jawaban</button>`;
+  return h+`<div class="fb" id="fb${i}"></div></div>`;
+}
+function renderPred(){
+  document.getElementById('predA').innerHTML='<h4>🤔 Prediksi 1</h4>'+blokSoal(0)+blokSoal(1);
+  document.getElementById('predB').innerHTML='<h4>💭 Prediksi 2 — Mengapa kamu memilih jawaban tersebut?</h4><div class="kunci" id="kunciB">🔒 Jawab dulu Prediksi 1 ya.</div>'+blokSoal(2)+blokSoal(3);
+  updatePred();
+}
+function tampilFb(i,ok){const f=document.getElementById('fb'+i);f.className='fb '+(ok?'ok':'no');f.innerHTML=(ok?BENAR:SALAH)+(ok||SOAL[i].tipe==='teks'?'':'<small>'+SOAL[i].hint+'</small>');}
+function pilihOpsi(i,v,btn){
+  const ok=v===SOAL[i].benar;
+  document.querySelectorAll('#ops'+i+' .opsi-btn').forEach(b=>b.disabled=true);
+  btn.classList.add(ok?'bn':'sl'); tampilFb(i,ok); jawab[i]=true;
+  hasilPrediksi[i]={soal:SOAL[i].teks,jawaban:btn.textContent,benar:ok}; updatePred();
+}
+function periksa(i){
+  const ta=document.getElementById('ta'+i),t=ta.value.trim();
+  if(t.length<3){ta.focus();return;}
+  const ok=SOAL[i].cek(t); tampilFb(i,ok); jawab[i]=true;
+  hasilPrediksi[i]={soal:SOAL[i].teks,jawaban:t,benar:ok}; updatePred();
+}
+function updatePred(){
+  const kunci=!(jawab[0]&&jawab[1]);
+  document.getElementById('predB').classList.toggle('locked',kunci);
+  document.getElementById('kunciB').style.display=kunci?'block':'none';
+  document.getElementById('btnLanjutP4').disabled=!jawab.every(Boolean);
+}
+function cekLanjutP4(){ if(!jawab.every(Boolean)){alert('Jawab dulu semua prediksinya, ya, sebelum lanjut ke simulasi.');return;} goPage(5); }
+renderPred();
+ 
+/* =========================================================
+   HALAMAN 5 : SIMULASI PARTIKEL (kanvas)
+   Mg(s) + 2HCl(aq) -> MgCl2(aq) + H2(g)
+   Tiap partikel Mg melepas 2 e-; tiap tumbukan efektif H+ mengambil 1 e-.
+   ========================================================= */
+const WARNA={H:'#FFFFFF',Cl:'#C7E04A',Mg:'#4C8C4A',e:'#F5C542'};
+const SEL=30, TOTAL_SEL=36, E_PER=2, P_EFEKTIF=.5; /* peluang tumbukan efektif: sama untuk pita & serbuk */
+function buatDunia(canvas,mode){
+  const d={canvas,ctx:canvas.getContext('2d'),W:canvas.width,H:canvas.height,mode,sel:[],asam:[],ion:[],gas:[],bereaksi:0,tumbukan:0,jumlahGas:0,waktu:0,selesai:false,riwayat:[{t:0,n:0}],sampelBerikut:.12,efek:[]};
+  const cx=d.W/2,dasar=d.H-60;
+  if(mode==='bongkah'){
+    const ox=cx-3*SEL,oy=dasar-6*SEL;
+    for(let i=0;i<6;i++)for(let j=0;j<6;j++)d.sel.push({gx:i,gy:j,blok:0,x:ox+i*SEL,y:oy+j*SEL,hidup:true,e:E_PER,h:0,kilat:0});
+  }else{
+    const pos=[[-220,-110],[-110,-150],[10,-115],[90,-150],[190,-105],[-180,-40],[-60,-45],[60,-40],[160,-45]];
+    pos.forEach((p,b)=>{for(let i=0;i<2;i++)for(let j=0;j<2;j++)d.sel.push({gx:i,gy:j,blok:b,x:cx+p[0]+i*SEL,y:dasar+p[1]+j*SEL,hidup:true,e:E_PER,h:0,kilat:0});});
+  }
+  for(let i=0;i<36;i++)d.asam.push(partikelAsam(d,'H'));
+  for(let i=0;i<22;i++)d.asam.push(partikelAsam(d,'Cl'));
+  return d;
+}
+function partikelAsam(d,j){return{jenis:j,x:30+Math.random()*(d.W-60),y:50+Math.random()*(d.H-110),vx:(Math.random()-.5)*4.8,vy:(Math.random()-.5)*4.8,r:j==='H'?7:10,cd:0};}
+function terbuka(d,s){return [[1,0],[-1,0],[0,1],[0,-1]].some(a=>!d.sel.some(o=>o.hidup&&o.blok===s.blok&&o.gx===s.gx+a[0]&&o.gy===s.gy+a[1]));}
+ 
+let duniaKiri=null,duniaKanan=null,rafSim=null,simJalan=false,waktuTerakhir=0;
+const $=id=>document.getElementById(id);
+const elKiri={p:$('sKiriPersen'),t:$('sKiriTumb'),c:$('sKiriGas'),w:$('sKiriWaktu'),b:$('barKiri')};
+const elKanan={p:$('sKananPersen'),t:$('sKananTumb'),c:$('sKananGas'),w:$('sKananWaktu'),b:$('barKanan')};
+function siapkanSimulasi(){if(!duniaKiri)resetSim();}
+function resetSim(){
+  hentikanSim();
+  duniaKiri=buatDunia(document.getElementById('simKiri'),'bongkah');
+  duniaKanan=buatDunia(document.getElementById('simKanan'),'serbuk');
+  perbaruiStat();gambarDunia(duniaKiri);gambarDunia(duniaKanan);gambarChartTumbukan();
+  document.getElementById('btnJalan').textContent='▶ Mulai';
+  document.getElementById('narasiSim').innerHTML='Tekan <b>Mulai</b>, lalu bandingkan kemiringan kedua garis pada grafik.';
+}
+function hentikanSim(){simJalan=false;if(rafSim){cancelAnimationFrame(rafSim);rafSim=null;}}
+document.getElementById('btnJalan').addEventListener('click',()=>{
+  if(!duniaKiri)resetSim();
+  simJalan=!simJalan;
+  document.getElementById('btnJalan').textContent=simJalan?'⏸ Jeda':'▶ Lanjutkan';
+  if(simJalan){waktuTerakhir=performance.now();rafSim=requestAnimationFrame(loopSim);}
+  else if(rafSim){cancelAnimationFrame(rafSim);rafSim=null;}
+});
+document.getElementById('btnUlang').addEventListener('click',resetSim);
+function loopSim(t){
+  const dt=Math.min((t-waktuTerakhir)/1000,.05);waktuTerakhir=t;
+  langkah(duniaKiri,dt);langkah(duniaKanan,dt);
+  gambarDunia(duniaKiri);gambarDunia(duniaKanan);gambarChartTumbukan();perbaruiStat();ceritaSim();
+  if(simJalan)rafSim=requestAnimationFrame(loopSim);
+}
+function langkah(d,dt){
+  if(!d.selesai)d.waktu+=dt;
+  d.sel.forEach(s=>{if(s.kilat>0)s.kilat-=dt;});
+  d.asam.forEach(p=>{
+    p.x+=p.vx;p.y+=p.vy;
+    if(p.x<p.r+14||p.x>d.W-p.r-14)p.vx*=-1;
+    if(p.y<p.r+56||p.y>d.H-p.r-20)p.vy*=-1;
+    p.x=Math.max(p.r+14,Math.min(d.W-p.r-14,p.x));p.y=Math.max(p.r+56,Math.min(d.H-p.r-20,p.y));
+    if(p.jenis!=='H')return;
+    if(p.cd>0){p.cd-=dt;return;}
+    for(const s of d.sel){
+      if(!s.hidup)continue;
+      if(p.x>s.x-4&&p.x<s.x+SEL+4&&p.y>s.y-4&&p.y<s.y+SEL+4){
+        if(terbuka(d,s)){
+          if(Math.random()<P_EFEKTIF)reaksi(d,s,p);
+          else{p.vx*=-1;p.vy*=-1;p.cd=.35;tambahEfek(d,p.x,p.y,false);}   /* tumbukan tidak efektif: memantul */
+        }else{p.vx*=-1;p.vy*=-1;p.cd=.2;}
+        break;
+      }
+    }
+  });
+  d.gas.forEach(g=>{g.y-=g.v;g.x+=Math.sin(g.y/24)*.7;g.umur-=dt;});
+  d.gas=d.gas.filter(g=>g.y>22&&g.umur>0);
+  d.ion.forEach(i=>{i.x+=i.vx;i.y+=i.vy;if(i.x<20||i.x>d.W-20)i.vx*=-1;if(i.y<60||i.y>d.H-20)i.vy*=-1;});
+  d.efek.forEach(f=>f.t+=dt);d.efek=d.efek.filter(f=>f.t<.9);
+  if(!d.selesai&&d.bereaksi>=TOTAL_SEL)d.selesai=true;
+  if(d.waktu>=d.sampelBerikut){d.riwayat.push({t:d.waktu,n:d.tumbukan});d.sampelBerikut=d.waktu+.12;}
+}
+function tambahEfek(d,x,y,ok){d.efek.push({x,y,t:0,ok});if(d.efek.length>6)d.efek.shift();}
+function reaksi(d,s,p){
+  s.e--;s.h++;s.kilat=.3;d.tumbukan++;tambahEfek(d,p.x,p.y,true);   /* tumbukan efektif: 1 e- pindah ke H+ -> atom H menempel */
+  if(s.h>=2){                                                          /* 2 atom H bergabung jadi H2, Mg larut sebagai Mg2+ */
+    s.hidup=false;d.bereaksi++;d.jumlahGas++;
+    d.gas.push({x:s.x+SEL/2,y:s.y,r:6+Math.random()*4,v:1.3+Math.random()*1.1,umur:6});
+    d.ion.push({x:s.x+SEL/2,y:s.y+SEL/2,vx:(Math.random()-.5)*2,vy:(Math.random()-.5)*2,r:10});
+  }
+  p.x=30+Math.random()*(d.W-60);p.y=60+Math.random()*40;p.vx=(Math.random()-.5)*4.8;p.vy=Math.abs(Math.random()*4);
+}
+function gambarDunia(d){
+  const c=d.ctx,W=d.W,H=d.H;c.clearRect(0,0,W,H);
+  const gr=c.createLinearGradient(0,34,0,H);gr.addColorStop(0,'#EAF6FF');gr.addColorStop(1,'#D3E9FF');
+  c.fillStyle=gr;c.fillRect(10,30,W-20,H-46);
+  c.strokeStyle='#9CC3E8';c.lineWidth=6;c.lineJoin='round';
+  c.beginPath();c.moveTo(10,16);c.lineTo(10,H-16);c.lineTo(W-10,H-16);c.lineTo(W-10,16);c.stroke();
+  c.font='bold 14px Nunito';c.fillStyle='#4A78A8';c.textAlign='left';c.fillText('Larutan HCl (aq)',18,46);
+  let lx=142;
+  [['H⁺','#fff','#8A93A3'],['Cl⁻',WARNA.Cl,'#8DA32E'],['Mg²⁺ logam',WARNA.Mg,'#2F5D2E'],['Mg²⁺ larut',WARNA.Mg,'#2F5D2E',1],['e⁻',WARNA.e,'#B8901A'],['H','#fff','#8A93A3'],['H₂','rgba(255,255,255,.85)','#8FB6D8']].forEach(([t,f,st,dash])=>{
+    c.beginPath();c.arc(lx,42,5,0,7);c.fillStyle=f;c.fill();c.strokeStyle=st;c.lineWidth=1.4;c.stroke();
+    if(dash){c.setLineDash([2,2]);c.strokeStyle='#4A78A8';c.beginPath();c.arc(lx,42,8,0,7);c.stroke();c.setLineDash([]);}
+    c.font='bold 10.5px Nunito';c.fillStyle='#4A78A8';c.textAlign='left';c.fillText(t,lx+(dash?12:9),46);lx+=t.length*6+(dash?34:28);
+  });
+  const blk={};d.sel.forEach(s=>{if(s.hidup)(blk[s.blok]=blk[s.blok]||[]).push(s);});
+  Object.values(blk).forEach(a=>{
+    const x0=Math.min(...a.map(s=>s.x))-4,y0=Math.min(...a.map(s=>s.y))-4,x1=Math.max(...a.map(s=>s.x+SEL))+4,y1=Math.max(...a.map(s=>s.y+SEL))+4;
+    c.fillStyle='rgba(120,170,230,.2)';c.strokeStyle='#8FB6D8';c.lineWidth=1.4;c.setLineDash([5,4]);
+    bulatKotak(c,x0,y0,x1-x0,y1-y0,10);c.fill();c.stroke();c.setLineDash([]);
+  });
+  d.ion.forEach(i=>{bola(c,i.x,i.y,i.r,WARNA.Mg,'#2F5D2E');teks(c,'Mg²⁺',i.x,i.y+3,'#fff',7);c.setLineDash([3,3]);c.strokeStyle='#4A78A8';c.lineWidth=1.4;c.beginPath();c.arc(i.x,i.y,i.r+4,0,7);c.stroke();c.setLineDash([]);});
+  d.sel.forEach(s=>{
+    if(!s.hidup)return;
+    const buka=terbuka(d,s),mx=s.x+SEL/2,my=s.y+SEL/2;
+    c.fillStyle=buka?'#DDEEDC':'#C9D8C7';c.strokeStyle=s.kilat>0?'#F5A300':(buka?'#5C8B5A':'#7C8C7A');c.lineWidth=s.kilat>0?3:1.4;
+    bulatKotak(c,s.x,s.y,SEL,SEL,4);c.fill();c.stroke();
+    bola(c,mx,my,SEL*.36,WARNA.Mg,'#2F5D2E');teks(c,'Mg²⁺',mx,my+3,'#fff',7.5);
+    for(let k=0;k<s.e;k++){const a=d.waktu*2+k*Math.PI+s.x;
+      c.beginPath();c.arc(mx+Math.cos(a)*(SEL*.45),my+Math.sin(a)*(SEL*.45),2.4,0,7);c.fillStyle=WARNA.e;c.fill();c.strokeStyle='#B8901A';c.lineWidth=.8;c.stroke();}
+    for(let k=0;k<s.h;k++){bola(c,s.x+8+k*(SEL-16),s.y+SEL-6,5.5,'#fff','#8A93A3');teks(c,'H',s.x+8+k*(SEL-16),s.y+SEL-3.6,'#4B5563',6.5);}
+  });
+  d.asam.forEach(p=>{
+    if(p.jenis==='H'){bola(c,p.x,p.y,p.r,WARNA.H,'#8A93A3');teks(c,'H⁺',p.x,p.y+2.6,'#4B5563',7);}
+    else{bola(c,p.x,p.y,p.r,WARNA.Cl,'#8DA32E');teks(c,'Cl⁻',p.x,p.y+3,'#4C5A1E',9);}
+  });
+  d.gas.forEach(g=>{
+    c.beginPath();c.arc(g.x,g.y,g.r,0,7);c.fillStyle='rgba(255,255,255,.85)';c.fill();c.strokeStyle='#8FB6D8';c.lineWidth=1.6;c.stroke();
+    if(g.r>7)teks(c,'H₂',g.x,g.y+3,'#5B7F9E',8.5);
+  });
+  d.efek.forEach(f=>{
+    const a=1-f.t/.9,col=f.ok?'245,163,0':'120,130,142';
+    c.beginPath();c.arc(f.x,f.y,6+f.t*38,0,7);c.strokeStyle=`rgba(${col},${a})`;c.lineWidth=2.5;c.stroke();
+    c.font='bold 10px Nunito';c.fillStyle=`rgba(${f.ok?'176,110,0':'90,98,108'},${a})`;c.textAlign='center';
+    c.fillText(f.ok?'efektif':'tidak efektif',f.x,f.y-14-f.t*8);c.textAlign='left';
+  });
+  if(d.selesai){
+    c.fillStyle='rgba(76,140,74,.92)';bulatKotak(c,W/2-110,H/2-26,220,52,16);c.fill();
+    c.fillStyle='#fff';c.font='bold 20px Baloo 2';c.textAlign='center';c.fillText('Mg habis bereaksi! 🎉',W/2,H/2+8);
+  }
+  c.textAlign='left';
+}
+function bola(c,x,y,r,isi,garis){
+  const g=c.createRadialGradient(x-r*.35,y-r*.4,r*.1,x,y,r);g.addColorStop(0,'#fff');g.addColorStop(.35,isi);g.addColorStop(1,isi);
+  c.beginPath();c.arc(x,y,r,0,7);c.fillStyle=g;c.fill();c.lineWidth=1.4;c.strokeStyle=garis;c.stroke();
+}
+function teks(c,t,x,y,w,u){c.font=`bold ${u||11}px Nunito`;c.fillStyle=w;c.textAlign='center';c.fillText(t,x,y);c.textAlign='left';}
+function bulatKotak(c,x,y,w,h,r){
+  c.beginPath();c.moveTo(x+r,y);c.lineTo(x+w-r,y);c.quadraticCurveTo(x+w,y,x+w,y+r);c.lineTo(x+w,y+h-r);c.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+  c.lineTo(x+r,y+h);c.quadraticCurveTo(x,y+h,x,y+h-r);c.lineTo(x,y+r);c.quadraticCurveTo(x,y,x+r,y);c.closePath();
+}
+function perbaruiStat(){
+  [[duniaKiri,elKiri],[duniaKanan,elKanan]].forEach(([d,e])=>{
+    if(!d)return;const pct=Math.round(d.bereaksi/TOTAL_SEL*100);
+    e.p.textContent=pct+'%';e.t.textContent=d.tumbukan;e.c.textContent=d.jumlahGas;
+    e.w.textContent=d.waktu.toFixed(1).replace('.',',')+' s';e.b.style.width=pct+'%';
+  });
+  const r=document.getElementById('ringkas');
+  if(r&&duniaKiri&&duniaKanan){
+    const f1=v=>v.toFixed(1).replace('.',','),L=(d,n)=>`<tr><td>${n}</td><td>${f1(d.waktu)} s</td><td>${d.tumbukan}</td><td>${f1(d.waktu>0?d.tumbukan/d.waktu:0)}</td><td>${Math.round(d.bereaksi/TOTAL_SEL*100)}%</td></tr>`;
+    r.innerHTML='<table><tr><th>Bentuk Mg</th><th>Waktu</th><th>Tumbukan efektif</th><th>Tumbukan efektif per detik</th><th>Mg bereaksi</th></tr>'+L(duniaKiri,'🧱 Pita')+L(duniaKanan,'🧂 Serbuk')+'</table><p class="narasi">Massa Mg sama, jadi jumlah H₂ akhir sama. Yang berbeda: serbuk punya lebih banyak partikel di permukaan, sehingga tumbukan efektif per detik lebih banyak dan laju reaksinya lebih besar.</p>';
+  }
+}
+function gambarChartTumbukan(){
+  const cv=document.getElementById('chartTumbukan');if(!cv)return;
+  const x=cv.getContext('2d'),W=cv.width,H=cv.height,pL=38,pB=26,pT=14,pR=14;x.clearRect(0,0,W,H);
+  x.strokeStyle='#D8D0AE';x.lineWidth=2;x.beginPath();x.moveTo(pL,pT);x.lineTo(pL,H-pB);x.lineTo(W-pR,H-pB);x.stroke();
+  x.fillStyle='#6B5E3F';x.font='bold 11px Nunito';x.textAlign='left';x.fillText('Tumbukan efektif (kumulatif)',4,12);
+  x.textAlign='right';x.fillText('waktu (s)',W-pR,H-8);x.textAlign='left';
+  if(!duniaKiri||!duniaKanan)return;
+  const maxT=Math.max(duniaKiri.waktu,duniaKanan.waktu,2),maxN=TOTAL_SEL*E_PER;
+  x.strokeStyle='#EFE9D0';x.lineWidth=1;
+  [0,.5,1].forEach(f=>{const y=(H-pB)-f*(H-pB-pT);x.beginPath();x.moveTo(pL,y);x.lineTo(W-pR,y);x.stroke();});
+  const garis=(d,w)=>{
+    if(d.riwayat.length<2)return;
+    x.strokeStyle=w;x.lineWidth=3;x.beginPath();
+    d.riwayat.forEach((p,i)=>{const px=pL+(p.t/maxT)*(W-pL-pR),py=(H-pB)-(p.n/maxN)*(H-pB-pT);i?x.lineTo(px,py):x.moveTo(px,py);});
+    x.stroke();const l=d.riwayat[d.riwayat.length-1];
+    x.beginPath();x.arc(pL+(l.t/maxT)*(W-pL-pR),(H-pB)-(l.n/maxN)*(H-pB-pT),4,0,7);x.fillStyle=w;x.fill();
+  };
+  garis(duniaKiri,'#D96C4A');garis(duniaKanan,'#4C8C4A');
+  x.font='bold 11px Nunito';x.fillStyle='#D96C4A';x.fillText('● Pita Mg',W-160,14);x.fillStyle='#4C8C4A';x.fillText('● Serbuk Mg',W-90,14);
+}
+function ceritaSim(){
+  if(!duniaKiri||!duniaKanan)return;
+  const n=document.getElementById('narasiSim'),f=v=>v.toFixed(1).replace('.',',');
+  if(duniaKanan.selesai&&duniaKiri.selesai)
+    n.innerHTML=`Kedua garis berakhir di ketinggian yang sama (jumlah H₂ yang terbentuk sama), tetapi serbuk selesai dalam <b>${f(duniaKanan.waktu)} s</b> dan pita dalam <b>${f(duniaKiri.waktu)} s</b>. Serbuk punya lebih banyak partikel di permukaan, sehingga tumbukan efektif per detik lebih banyak dan laju reaksinya lebih besar.`;
+  else if(duniaKanan.selesai)
+    n.innerHTML='Serbuk habis lebih dulu: hampir semua partikelnya berada di permukaan, sehingga H⁺ dapat menumbuk lebih banyak partikel Mg sekaligus.';
+  else if(simJalan)
+    n.innerHTML='<b>Cincin kuning</b> = tumbukan efektif: 1 elektron pindah dari Mg ke H⁺, jadi atom H yang menempel. <b>Cincin abu-abu</b> = tidak efektif, H⁺ memantul. Setelah 2 atom H menempel, keduanya bergabung menjadi H₂ dan Mg larut sebagai Mg²⁺.';
+}
+ 
+/* ---------- ZOOM PARTIKEL ---------- */
+const zLayer=document.getElementById('zoomLayer'),zc=document.getElementById('zoomCanvas'),zctx=zc.getContext('2d');
+let zMode='bongkah',zRaf=null,zT=0,zAtom=[],zBebas=[],zGas=[],zFx=[],zUlang=null;
+document.getElementById('btnZoomKiri').addEventListener('click',()=>bukaZoom('bongkah'));
+document.getElementById('btnZoomKanan').addEventListener('click',()=>bukaZoom('serbuk'));
+document.getElementById('btnZoomTutup').addEventListener('click',tutupZoom);
+document.getElementById('btnZoomGanti').addEventListener('click',()=>bukaZoom(zMode==='bongkah'?'serbuk':'bongkah'));
+zLayer.addEventListener('click',e=>{if(e.target===zLayer)tutupZoom();});
+function bukaZoom(mode){
+  zMode=mode;zLayer.classList.add('on');
+  document.getElementById('zoomJudul').textContent=mode==='bongkah'?'🔬 Zoom partikel — permukaan PITA Mg':'🔬 Zoom partikel — kepingan SERBUK Mg';
+  document.getElementById('zoomNarasi').innerHTML=mode==='bongkah'
+   ?'<b>Pita Mg:</b> ion Mg²⁺ tersusun rapat dan dikelilingi elektron bebas (daerah biru).<br>① Hanya lapisan paling atas yang bersentuhan dengan HCl, jadi hanya itu yang bisa ditumbuk H⁺.<br>② <b>Cincin kuning</b> = tumbukan efektif: 1 elektron pindah dari Mg ke H⁺, atom H menempel. <b>Cincin abu-abu</b> = tidak efektif, H⁺ memantul.<br>③ Setelah 2 atom H menempel, keduanya bergabung menjadi gas H₂ dan Mg larut sebagai Mg²⁺.<br>④ Lapisan di bawahnya baru bereaksi setelah lapisan atasnya habis, sehingga tumbukan efektif per detik lebih sedikit.'
+   :'<b>Serbuk Mg:</b> kepingan logam sangat kecil dengan susunan partikel yang sama seperti pita.<br>① Karena kepingannya kecil, hampir semua partikel Mg berada di permukaan dan langsung bersentuhan dengan HCl.<br>② Lebih banyak partikel yang dapat ditumbuk H⁺, jadi tumbukan efektif per detik lebih banyak.<br>③ Peluang efektif tiap tumbukan sama dengan pada pita; yang berbeda hanya banyaknya partikel yang bisa ditumbuk.<br>④ Akibatnya gas H₂ terbentuk lebih cepat.';
+  susunZoom();if(!zRaf)zRaf=requestAnimationFrame(loopZoom);
+}
+function tutupZoom(){zLayer.classList.remove('on');if(zRaf){cancelAnimationFrame(zRaf);zRaf=null;}if(zUlang){clearTimeout(zUlang);zUlang=null;}}
+function susunZoom(){
+  zAtom=[];zBebas=[];zGas=[];zFx=[];zT=0;const S=70;
+  if(zMode==='bongkah'){
+    const ox=zc.width/2-2.5*S;
+    for(let i=0;i<6;i++)for(let j=0;j<3;j++)zAtom.push({x:ox+i*S,y:130+j*S,kol:i,baris:j,grup:0,hidup:true,e:2,h:0,ph:Math.random()*6.28});
+  }else{
+    [[150,108],[410,108],[670,108],[150,268],[410,268],[670,268]].forEach((p,g)=>{
+      [[-35,-35],[35,-35],[-35,35],[35,35]].forEach(o=>zAtom.push({x:p[0]+o[0],y:p[1]+o[1],grup:g,hidup:true,e:2,h:0,ph:Math.random()*6.28}));
+    });
+  }
+  for(let i=0;i<8;i++)zBebas.push({j:'Cl',x:50+Math.random()*(zc.width-100),y:40+Math.random()*(zc.height-80),vx:(Math.random()-.5)*1.4,vy:(Math.random()-.5)*1.4});
+  for(let i=0;i<8;i++)zBebas.push({j:'H',x:50+Math.random()*(zc.width-100),y:30+Math.random()*50,vx:(Math.random()-.5)*2,vy:1+Math.random()*1.2});
+}
+function zTerbuka(a){return a.hidup&&(zMode==='serbuk'||!zAtom.some(o=>o.hidup&&o.kol===a.kol&&o.baris<a.baris));}
+function loopZoom(){
+  zT+=.016;const c=zctx,W=zc.width,H=zc.height;c.clearRect(0,0,W,H);
+  const g=c.createLinearGradient(0,0,0,H);g.addColorStop(0,'#F2F9FF');g.addColorStop(1,'#DCEDFF');c.fillStyle=g;c.fillRect(0,0,W,H);
+  c.font='bold 14px Nunito';c.fillStyle='rgba(74,120,168,.75)';c.textAlign='left';c.fillText('larutan HCl (aq)',18,24);
+  let zx=190;[['H⁺','#fff','#8A93A3'],['H','#fff','#8A93A3'],['Mg²⁺','#4C8C4A','#2F5D2E'],['e⁻','#F5C542','#B8901A'],['Cl⁻','#C7E04A','#8DA32E'],['H₂','rgba(255,255,255,.85)','#8FB6D8']].forEach(([l,f,s])=>{
+    c.beginPath();c.arc(zx,20,6,0,7);c.fillStyle=f;c.fill();c.strokeStyle=s;c.lineWidth=1.4;c.stroke();c.font='bold 12px Nunito';c.fillStyle='rgba(74,120,168,.9)';c.textAlign='left';c.fillText(l,zx+11,25);zx+=l.length*8+36;});
+  const grup={};zAtom.forEach(a=>{if(a.hidup)(grup[a.grup]=grup[a.grup]||[]).push(a);});
+  Object.values(grup).forEach(a=>{
+    const x0=Math.min(...a.map(t=>t.x))-34,y0=Math.min(...a.map(t=>t.y))-34,x1=Math.max(...a.map(t=>t.x))+34,y1=Math.max(...a.map(t=>t.y))+34;
+    c.fillStyle='rgba(120,170,230,.2)';c.strokeStyle='#8FB6D8';c.lineWidth=2;c.setLineDash([6,5]);bulatKotak(c,x0,y0,x1-x0,y1-y0,22);c.fill();c.stroke();c.setLineDash([]);
+  });
+  if(zMode==='bongkah'){
+    c.font='bold 12px Nunito';c.fillStyle='#2F5D2E';c.textAlign='center';
+    c.fillText('▼ lapisan permukaan: bersentuhan dengan larutan HCl',W/2,86);
+    c.fillStyle='#6B5E3F';c.fillText('bagian dalam logam: tidak bersentuhan dengan larutan, baru bereaksi setelah lapisan di atasnya habis',W/2,H-10);c.textAlign='left';
+  }
+  zAtom.forEach(a=>{
+    if(!a.hidup)return;const oy=Math.sin(zT*2+a.ph)*1.5;
+    bola(c,a.x,a.y+oy,22,zTerbuka(a)?WARNA.Mg:'#8FB88C','#2F5D2E');teks(c,'Mg²⁺',a.x,a.y+oy+4,'#fff',11);
+    for(let k=0;k<a.e;k++){const t=zT*1.4+a.ph+k*Math.PI;
+      c.beginPath();c.arc(a.x+Math.cos(t)*31,a.y+oy+Math.sin(t)*31,4,0,7);c.fillStyle=WARNA.e;c.fill();c.strokeStyle='#B8901A';c.lineWidth=1;c.stroke();}
+    for(let k=0;k<a.h;k++){bola(c,a.x-9+k*18,a.y+oy+27,7,'#fff','#8A93A3');teks(c,'H',a.x-9+k*18,a.y+oy+30,'#4B5563',9);}
+  });
+  zBebas.forEach(p=>{
+    p.x+=p.vx;p.y+=p.vy;if(p.x<26||p.x>W-26)p.vx*=-1;if(p.y<26||p.y>H-26)p.vy*=-1;
+    if(p.j==='H'){
+      if(p.cd>0)p.cd-=.016;
+      let t=null,dm=1e9;zAtom.forEach(a=>{if(zTerbuka(a)){const d=Math.hypot(a.x-p.x,a.y-p.y);if(d<dm){dm=d;t=a;}}});
+      if(t&&!(p.cd>0)){
+        p.vx+=(t.x-p.x)/dm*.08;p.vy+=(t.y-p.y)/dm*.08;
+        p.vx=Math.max(-3.2,Math.min(3.2,p.vx));p.vy=Math.max(-3.2,Math.min(3.2,p.vy));
+        if(dm<30){
+          if(Math.random()<P_EFEKTIF){                     /* efektif: 1 e- pindah ke H+ -> atom H menempel */
+            t.e--;t.h++;zFx.push({x:t.x,y:t.y,t:0,ok:true});
+            if(t.h>=2){t.hidup=false;zGas.push({x:t.x,y:t.y,r:14,umur:3});zBebas.push({j:'Mg',x:t.x,y:t.y,vx:(Math.random()-.5)*1.2,vy:(Math.random()-.5)*1.2});}
+            p.x=40+Math.random()*(W-80);p.y=30;p.vx=(Math.random()-.5)*2;p.vy=1.2;
+            if(!zAtom.some(a=>a.hidup)&&!zUlang)zUlang=setTimeout(()=>{zUlang=null;susunZoom();},1300);
+          }else{                                            /* tidak efektif: memantul */
+            zFx.push({x:p.x,y:p.y,t:0,ok:false});
+            p.vx=-p.vx*1.1+(Math.random()-.5);p.vy=-p.vy*1.1+(Math.random()-.5);p.cd=.9;
+          }
+        }
+      }
+      bola(c,p.x,p.y,10,WARNA.H,'#8A93A3');teks(c,'H⁺',p.x,p.y+4,'#4B5563',10);
+    }else if(p.j==='Cl'){bola(c,p.x,p.y,15,WARNA.Cl,'#8DA32E');teks(c,'Cl⁻',p.x,p.y+4,'#41520F',11);}
+    else{bola(c,p.x,p.y,15,WARNA.Mg,'#2F5D2E');teks(c,'Mg²⁺',p.x,p.y+4,'#fff',9.5);c.setLineDash([4,3]);c.strokeStyle='#4A78A8';c.lineWidth=1.6;c.beginPath();c.arc(p.x,p.y,19,0,7);c.stroke();c.setLineDash([]);}
+  });
+  zGas.forEach(q=>{q.y-=1.9;q.umur-=.016;q.r+=.05;});zGas=zGas.filter(q=>q.umur>0&&q.y>-30);
+  zGas.forEach(q=>{c.beginPath();c.arc(q.x,q.y,q.r,0,7);c.fillStyle='rgba(255,255,255,.85)';c.fill();c.strokeStyle='#8FB6D8';c.lineWidth=2;c.stroke();teks(c,'H₂',q.x,q.y+4,'#5B7F9E',11);});
+  zFx.forEach(f=>f.t+=.016);zFx=zFx.filter(f=>f.t<1.2);
+  zFx.forEach(f=>{
+    const a=Math.max(0,1-f.t/1.2),col=f.ok?'245,163,0':'120,130,142';
+    c.beginPath();c.arc(f.x,f.y,16+f.t*46,0,7);c.strokeStyle=`rgba(${col},${a})`;c.lineWidth=3;c.stroke();
+    c.font='bold 12px Nunito';c.fillStyle=`rgba(${f.ok?'176,110,0':'90,98,108'},${a})`;c.textAlign='center';
+    c.fillText(f.ok?'✔ efektif: 1 e⁻ pindah ke H⁺':'✖ tidak efektif: memantul',f.x,f.y-30-f.t*10);c.textAlign='left';
+  });
+  zRaf=requestAnimationFrame(loopZoom);
+}
+ 
+/* ===== EVALUASI (halaman 6) : 4 pilihan ganda x 15 = 60, esai = 40 ===== */
+const EV=[
+ {q:'Pada massa yang sama, bentuk magnesium manakah yang luas permukaannya paling besar?',o:['Pita Mg','Bongkahan Mg','Serbuk Mg','Semuanya sama besar'],b:2},
+ {q:'Mengapa memperbesar luas permukaan zat padat dapat mempercepat laju reaksi?',o:['Karena energi aktivasi reaksi menjadi lebih kecil','Karena lebih banyak partikel zat padat yang dapat ditumbuk sehingga frekuensi tumbukan efektif meningkat','Karena partikel-partikel bergerak lebih cepat','Karena konsentrasi larutan HCl bertambah'],b:1},
+ {q:'Pada grafik simulasi, garis serbuk Mg naik lebih curam daripada garis pita Mg. Hal ini menunjukkan bahwa ....',o:['tumbukan efektif per satuan waktu pada serbuk lebih banyak','jumlah gas H₂ akhir pada serbuk lebih banyak','suhu larutan pada serbuk lebih tinggi','HCl pada serbuk lebih pekat'],b:0},
+ {q:'Jika massa Mg sama dan HCl berlebih, bagaimana jumlah gas H₂ akhir pada pita dan serbuk?',o:['Serbuk menghasilkan lebih banyak','Pita menghasilkan lebih banyak','Sama banyak, tetapi serbuk membutuhkan waktu lebih singkat','Sama banyak dan waktunya juga sama'],b:2}
+];
+const ESAI='Berdasarkan hasil simulasi, jelaskan mengapa serbuk Mg bereaksi lebih cepat daripada pita Mg walaupun massanya sama!';
+/* Rubrik esai (4 aspek x 10 poin) */
+const RUBRIK=[
+ ['Menyebut luas permukaan / partikel di permukaan yang bersentuhan',/(zzperm|sentuh|kontak)/],
+ ['Menyebut tumbukan (efektif) lebih banyak atau lebih sering',/(tumbuk|tabrak)/],
+ ['Menyimpulkan laju reaksi lebih cepat',/(laju|cepat|singkat|habis)/],
+ ['Menyebut bukti dari simulasi (grafik, waktu, atau garis)',/(grafik|garis|curam|waktu|simulasi|detik)/]
+];
+const jwbEval=[-1,-1,-1,-1];
+(function(){
+  let h='';
+  EV.forEach((s,i)=>{h+=`<div class="evq"><p>${i+1}. ${s.q}</p>`+s.o.map((t,j)=>`<button type="button" class="evopt" data-q="${i}" onclick="pilihEval(${i},${j},this)">${String.fromCharCode(65+j)}. ${t}</button>`).join('')+'</div>';});
+  h+=`<div class="evq"><p>5. ${ESAI}</p><textarea id="taEsai" rows="4" placeholder="Tulis jawabanmu di sini..."></textarea></div>`;
+  document.getElementById('evalSoal').innerHTML=h;
+})();
+function pilihEval(i,j,btn){jwbEval[i]=j;document.querySelectorAll('.evopt[data-q="'+i+'"]').forEach(x=>x.classList.remove('pilih'));btn.classList.add('pilih');}
+ 
+let sedangKirim=false;
+function tampilSkor(r){
+  const el=document.getElementById('thanksMsg');
+  el.innerHTML=`<div>🎉 Skor akhirmu</div><div class="skorBesar">${r.total}<small style="font-size:1.6rem">/100</small></div>
+   <div class="rincian">Pilihan ganda: ${r.nPG} dari 4 soal benar = <b>${r.pg}</b> dari 60<br>${r.detail}
+   Esai: <b>${r.es}</b> dari 40 (${r.rub})<br><br>Pertanyaan pemantik dan prediksi tidak dihitung ke skor akhir.<br>Terima kasih sudah belajar bersama Jaja! Sampai jumpa di simulasi berikutnya 🎉</div>`;
+  document.getElementById('formAkhir').style.display='none';el.style.display='block';window.scrollTo(0,0);
+  document.getElementById('p6').scrollTop=0;
+}
+function submitReflect(){
+  if(sedangKirim) return;
+  const ulang=document.getElementById('catKirim');if(ulang)ulang.remove();
+  const g=id=>document.getElementById(id),st=g('statusKirim');
+  const gagal=(m,el)=>{st.textContent='⚠ '+m;st.style.cssText='background:#FDE8E4;color:#A9492E;border-radius:12px;padding:10px;font-size:1rem';st.scrollIntoView({behavior:'smooth',block:'center'});};
+  const materi=g('rMateri').value,simpul=g('rSimpul').value,kes=g('rKesimpulan').value,esai=g('taEsai').value.trim();
+  if(jwbEval.includes(-1)){gagal('Jawab dulu keempat soal pilihan ganda ya (soal '+(jwbEval.indexOf(-1)+1)+' belum dijawab).');return;}
+  if(esai.length<3){gagal('Jawab dulu soal esai nomor 5 ya.');return;}
+  if(!materi.trim()||!simpul||!kes.trim()){gagal('Lengkapi refleksi: materi, pilihan kesimpulan, dan kesimpulanmu ya.');return;}
+  st.textContent='';st.style.cssText='';
+  const nama=g('inNama').value.trim()||'-',kelas=g('inKelas').value.trim()||'-',kelompok=g('inKelompok').value.trim()||'-';
+  const data={nama,kelas,kelompok,materi,simpul,kesimpulan:kes,timestamp:new Date().toISOString()};
+  let skor=0;
+  for(let i=0;i<4;i++){const h=hasilPrediksi[i]||{};data['p'+(i+1)+'_jawaban']=h.jawaban||'';data['p'+(i+1)+'_hasil']=h.jawaban?(h.benar?'Benar':'Salah'):'';if(h.benar)skor++;}
+  data.skor_prediksi=skor+'/4';
+  data.pemantik_pilihan=hasilPem?hasilPem.pilihan:'';data.pemantik_alasan=hasilPem?hasilPem.alasan:'';data.pemantik_hasil=hasilPem?(hasilPem.benar?'Benar':'Kurang tepat'):'';
+  let nPG=0,detail='';
+  EV.forEach((s,i)=>{const ok=jwbEval[i]===s.b;if(ok)nPG++;data['e'+(i+1)+'_jawaban']=String.fromCharCode(65+jwbEval[i]);data['e'+(i+1)+'_hasil']=ok?'Benar':'Salah';
+    detail+=`Soal ${i+1}: ${ok?'✅ benar':'❌ salah (jawaban benar '+String.fromCharCode(65+s.b)+')'}<br>`;});
+  const n=norm(esai);let es=0;const rub=RUBRIK.map(r=>{const ok=r[1].test(n);if(ok)es+=10;return (ok?'✔ ':'✖ ')+r[0];}).join('; ');
+  const pg=nPG*15,total=pg+es;
+  data.e5_jawaban=esai;data.esai_skor=es;data.esai_rincian=rub;data.skor_pg=pg;data.skor_total=total;
+  try{localStorage.setItem('refleksi_'+Date.now(),JSON.stringify(data));}catch(e){}
+  const hasil={total,pg,es,nPG,detail,rub};
+  tampilSkor(hasil);
+  const cat=document.createElement('div');cat.className='rincian';cat.style.textAlign='center';cat.id='catKirim';
+  document.getElementById('thanksMsg').appendChild(cat);
+  if(!URL_SPREADSHEET){cat.textContent='ℹ Jawabanmu belum terkirim ke guru (URL spreadsheet belum diatur).';return;}
+  sedangKirim=true;cat.textContent='⏳ Mengirim jawabanmu ke guru…';
+  const ctl=new AbortController(),tm=setTimeout(()=>ctl.abort(),20000);
+  fetch(URL_SPREADSHEET,{method:'POST',body:new URLSearchParams(data),signal:ctl.signal})
+    .then(r=>r.text())
+    .then(t=>{clearTimeout(tm);t=String(t).trim();
+      if(t==='OK'){cat.textContent='✅ Jawabanmu sudah terkirim ke guru.';}
+      else{sedangKirim=false;cat.innerHTML='⚠ Belum masuk spreadsheet. '+(t.indexOf('<')>=0?'Google menolak akses (pastikan deploy: Who has access = Anyone, dan URL /exec benar).':'Balasan server: '+t.slice(0,200))+' <button class="nav-btn kecil" style="width:auto" onclick="submitReflect()">kirim ulang</button>';}})
+    .catch(e=>{clearTimeout(tm);sedangKirim=false;cat.innerHTML='⚠ Tidak bisa memastikan terkirim ('+e.name+'). Cek internet, akses deploy = Anyone, dan URL /exec. <button class="nav-btn kecil" style="width:auto" onclick="submitReflect()">kirim ulang</button>';});
+}
+</script>
+</body>
+</html>
+Claude finished the response
